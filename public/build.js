@@ -1,20 +1,25 @@
+let new_issue = false;
+
 window.onload = function () {
     let url = window.location.href.split('/');
-    let issue = url[url.length - 1];
+    issue = parseInt(url[url.length - 1]);
+
 
     getComic(issue);
 }
 
-function getComic(issue) {
+function getComic() {
+    console.log(issue);
+
     let xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function () {
         fill_html(JSON.parse(this.responseText));
     }
 
-    // console.log(window.location.origin + "/api/getXKCD?num=" + issue);
-    if (issue == "") {
+    if (isNaN(issue)) {
         xhttp.open("GET", window.location.origin + "/api/getXKCD", true);
+        new_issue = true;
     } else {
         xhttp.open("GET", window.location.origin + "/api/getXKCD?num=" + issue, true);
     }
@@ -23,9 +28,6 @@ function getComic(issue) {
 }
 
 function fill_html(data_obj) {
-    // let prev_button = document.getElementById('previous');
-    // let rand_button = document.getElementById('random');
-
     let title = document.getElementById('title');
     let comic_strip = document.getElementById('strip');
     let date = document.getElementById('date');
@@ -36,10 +38,25 @@ function fill_html(data_obj) {
     date.textContent = data_obj.date;
     counter.textContent = data_obj.views + " views";
 
-    // document.getElementById('next').addEventListener('click', (event) => {
-    //     console.log("next button clicked!");
-    // });    
+    document.getElementById('next').addEventListener('click', (event) => {
+        if (!new_issue) {
+            window.location.replace(window.location.origin + "/comic/" + (data_obj.num + 1));
+        }
+    });
 
-    // prev_button.href = (window.location.href + "/" + (data_obj.num - 1));
-    // rand_button.href = (window.location.href + "/" + (Math.floor(Math.random() * (data_obj.num - 1))));
+    document.getElementById('previous').addEventListener('click', (event) => {
+        if (data_obj.num != 0) {
+            window.location.replace(window.location.origin + "/comic/" + (data_obj - 1));
+        }
+    });
+
+    document.getElementById('random').addEventListener('click', (event) => {
+        let xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function () {
+            window.location.replace(window.location.origin + "/comic/" + (Math.floor(Math.random() * JSON.parse(this.responseText).num) + 1));
+        }
+        xhttp.open("GET", window.location.origin + "/api/getXKCD", true);
+        xhttp.send();
+    });
 }
