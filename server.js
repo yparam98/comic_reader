@@ -58,3 +58,9 @@ app.get('/api/getXKCD', (request, response) => {
         response.status(500).send(caught_error);
     }
 });
+
+// catch all other pages and redirect to root
+app.get("*", (req, res) => {
+    res.redirect("/");
+    // res.sendFile(path.join(__dirname, '/views/comic.html'));
+});
