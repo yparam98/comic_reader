@@ -1,4 +1,4 @@
-const port = 5000;
+const PORT = 5000;
 
 const express = require('express');
 const app = express();
@@ -13,8 +13,8 @@ const { rejects } = require('assert');
 
 var exec = require('child_process').exec;
 
-app.listen(port, () => {
-    console.log("Express server listening on port ", port);
+app.listen(PORT, () => {
+    console.log("Express server listening on port ", PORT);
 });
 
 app.use(express.static('public'));
