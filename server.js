@@ -26,37 +26,23 @@ app.get('/:num', (request, response) => {
 });
 
 app.get('/api/getXKCD', (request, response) => {
-    let comic_object = {};
-    let error = null;
-
     try {
-        if (request.query.num == null) {
-            service.getCurrentXKCD().then((data) => {
-                comic_object = {
-                    "num": data.num,
-                    "title": data.safe_title,
-                    "link": data.img,
-                    "date": momentjs().year(data.year).month(data.month).date(data.day).format('LL')
-                };
-            }).catch((err) => {
-                throw err;
+        service.getXKCD(request.query.num).then((data) => {
+            fs.appendFile(path.join(__dirname, '/counter.dat'), (data.num.toString() + '\n'), (err) => {
+                if (err) {
+                    throw err;
+                } else {
+                    response.send({
+                        "num": data.num,
+                        "title": data.safe_title,
+                        "link": data.img,
+                        "date": momentjs().year(data.year).month(data.month).date(data.day).format('LL')
+                    });
+                }
             });
-        } else {
-            service.getOldXKCD(request.query.num).then((data) => {
-                comic_object = {
-                    "num": data.num,
-                    "title": data.safe_title,
-                    "link": data.img,
-                    "date": momentjs().year(data.year).month(data.month).date(data.day).format('LL')
-                };
-            }).catch((err) => {
-                throw err;
-            });
-        }
-
-        fs.appendFile(path.join(__dirname, '/counter.dat'), comic_object.num); // write the comic num to file
-
-        response.send(comic_object);
+        }).catch((err) => {
+            throw err;
+        });
     } catch (err) {
         response.status(500).send(err);
     }
@@ -64,6 +50,10 @@ app.get('/api/getXKCD', (request, response) => {
 
 app.get('/api/getViews', (request, response) => {
     fs.readFile(path.join(__dirname, '/counter.dat'), (err, data) => {
-        console.log(data);
-    }); // write the comic num to file
+        if (err) {
+            response.status(500).send(err);
+        } else {
+            response.send(data);
+        }
+    });
 });

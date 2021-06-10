@@ -1,23 +1,23 @@
 const axios = require('axios').default;
 
-exports.getCurrentXKCD = function() {
-    return new Promise((resolve, reject) => {
-        axios.get('http://xkcd.com/info.0.json').then((response) => {
-            resolve(response.data);
-        }).catch((error) => {
-            reject(error);
+exports.getXKCD = function (num) {
+    if (num == null) {
+        return new Promise((resolve, reject) => {
+            axios.get('http://xkcd.com/info.0.json').then((response) => {
+                resolve(response.data);
+            }).catch((error) => {
+                reject(err);
+            });
         });
-    });
-}
-
-exports.getOldXKCD =  function(num) {
-    return new Promise((resolve, reject) => {
-        axios.get('http://xkcd.com/' + num + '/info.0.json').then((response) => {
-            resolve(response.data);
-        }).catch((error) => {
-            reject(error);
+    } else {
+        return new Promise((resolve, reject) => {
+            axios.get('http://xkcd.com/' + num + '/info.0.json').then((response) => {
+                resolve(response.data);
+            }).catch((error) => {
+                reject(error);
+            });
         });
-    });
+    }
 }
 
 // let current_issue = 0;
