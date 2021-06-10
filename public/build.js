@@ -1,43 +1,45 @@
-let current_issue = 0;
+window.onload = function () {
+    let url = window.location.href.split('/');
+    let issue = url[url.length - 1];
 
-let next_button = document.getElementById('next');
-let prev_button = document.getElementById('previous');
-let rand_button = document.getElementById('random');
+    getComic(issue);
+}
 
-next_button.addEventListener('click', (event) => {
-    console.log(window.location.href);
+function getComic(issue) {
     let xhttp = new XMLHttpRequest();
+
     xhttp.onreadystatechange = function () {
-        fill_html(this.responseText);
+        fill_html(JSON.parse(this.responseText));
     }
-    xhttp.open("GET", window.location.href + "api/getXKCD", true);
-    xhttp.send({num: (current_issue + 1)});
-});
 
-prev_button.addEventListener('click', (event) => {
-    // xhttp.onload = function () {
-    //     fill_html(this.responseText);
-    // }
-    // xhttp.open("GET", "/api/getXKCD/" + current_issue - 1, true);
-    // xhttp.send();
-});
+    // console.log(window.location.origin + "/api/getXKCD?num=" + issue);
+    if (issue == "") {
+        xhttp.open("GET", window.location.origin + "/api/getXKCD", true);
+    } else {
+        xhttp.open("GET", window.location.origin + "/api/getXKCD?num=" + issue, true);
+    }
 
-rand_button.addEventListener('click', (event) => {
-    // xhttp.onload = function () {
-    //     fill_html(this.responseText);
-    // }
-    // xhttp.open("GET", "/api/getXKCD/" + (Math.floor(Math.random() * (100 - 1))), true);
-    // xhttp.send();
-});
+    xhttp.send();
+}
 
 function fill_html(data_obj) {
+    // let prev_button = document.getElementById('previous');
+    // let rand_button = document.getElementById('random');
+
     let title = document.getElementById('title');
-    let number = document.getElementById('number');
     let comic_strip = document.getElementById('strip');
     let date = document.getElementById('date');
+    let counter = document.getElementById('counter');
 
-    title.textContent = data_obj.safe_title;
-    number.textContent = data_obj.num;
+    title.textContent = data_obj.num + ": " + data_obj.title;
     comic_strip.src = data_obj.link;
     date.textContent = data_obj.date;
+    counter.textContent = data_obj.views + " views";
+
+    // document.getElementById('next').addEventListener('click', (event) => {
+    //     console.log("next button clicked!");
+    // });    
+
+    // prev_button.href = (window.location.href + "/" + (data_obj.num - 1));
+    // rand_button.href = (window.location.href + "/" + (Math.floor(Math.random() * (data_obj.num - 1))));
 }
