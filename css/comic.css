@@ -1,0 +1,73 @@
+body {
+    margin: 2%;
+    font-family: 'Raleway', sans-serif;
+}
+
+/* @keyframes button-curve-in {
+    from {border-radius: 0px;}
+    to {border-radius: 20px;}
+}
+
+@keyframes button-curve-out {
+    from {border-radius: 0px;}
+    to {border-radius: 20px;}
+} */
+
+button {
+    color: white;
+    background-color: rgba(0, 0, 0, 0.9);
+    border: 2px;
+    border-color: transparent;
+    border-style: solid;
+    border-radius: 0px;
+    width: 10%;
+    height: 200%;
+    transition: border-radius 0.15s ease-out;
+    /* box-shadow: 0px 0px; */
+}
+
+button:hover {
+    /* border-color: rgb(0, 63, 92); */
+    /* animation: button-curve-in 250ms linear 0s 1 normal forwards; */
+    border-radius: 20px;
+    /* box-shadow: 0px 0px; */
+}
+
+button:active {
+    /* box-shadow: 5px 5px; */
+    border-color: white;
+}
+
+#metadata_text {
+    font-size: medium;
+}
+
+#comic_container {
+    flex: 1;
+    flex-direction: column;
+    display: grid;
+    justify-content: center;
+    text-align: center;
+}
+
+.row {
+    flex: 1;
+    flex-direction: row;
+    display: inline-flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    background-color: rgba(0, 0, 0, 0.9);
+
+    color: rgb(255, 255, 255);
+    font-size: small;
+    text-align: center;
+}
