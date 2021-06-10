@@ -36,7 +36,7 @@ app.get('/api/getXKCD', (request, response) => {
                 if (file_error) {
                     throw file_error;
                 } else {
-                    exec('grep -c ' + data.num.toString() + ' ' + path.join(__dirname, '/counter.dat'), (exec_error, exec_data) => {
+                    exec('grep -c ^' + data.num.toString() + '$ ' + path.join(__dirname, '/counter.dat'), (exec_error, exec_data) => {
                         if (exec_error) {
                             throw exec_error;
                         } else {
@@ -57,14 +57,4 @@ app.get('/api/getXKCD', (request, response) => {
     } catch (caught_error) {
         response.status(500).send(caught_error);
     }
-});
-
-app.get('/api/getViews', (request, response) => {
-    fs.readFile(path.join(__dirname, '/counter.dat'), (err, data) => {
-        if (err) {
-            response.status(500).send(err);
-        } else {
-            response.send(data);
-        }
-    });
 });
