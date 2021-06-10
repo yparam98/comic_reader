@@ -13,7 +13,7 @@ const { rejects } = require('assert');
 
 var exec = require('child_process').exec;
 
-app.listen(PORT, () => {
+app.listen(process.env.PORT || PORT, () => {
     console.log("Express server listening on port ", PORT);
 });
 
