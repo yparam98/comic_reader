@@ -1,5 +1,3 @@
-let new_issue = false;
-
 window.onload = function () {
     let url = window.location.href.split('/');
     issue = parseInt(url[url.length - 1]);
@@ -19,7 +17,6 @@ function getComic() {
 
     if (isNaN(issue)) {
         xhttp.open("GET", window.location.origin + "/api/getXKCD", true);
-        new_issue = true;
     } else {
         xhttp.open("GET", window.location.origin + "/api/getXKCD?num=" + issue, true);
     }
@@ -28,6 +25,15 @@ function getComic() {
 }
 
 function fill_html(data_obj) {
+    let new_issue_num = 0;
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        new_issue_num = JSON.parse(this.responseText).num;
+    }
+    xhttp.open("GET", window.location.origin + "/api/getXKCD", true);
+    xhttp.send();
+
+
     let title = document.getElementById('title');
     let comic_strip = document.getElementById('strip');
     let date = document.getElementById('date');
@@ -38,25 +44,20 @@ function fill_html(data_obj) {
     date.textContent = data_obj.date;
     counter.textContent = data_obj.views + " views";
 
+    
     document.getElementById('next').addEventListener('click', (event) => {
-        if (!new_issue) {
+        if (data_obj.num < new_issue_num) {
             window.location.replace(window.location.origin + "/comic/" + (data_obj.num + 1));
         }
     });
 
     document.getElementById('previous').addEventListener('click', (event) => {
-        if (data_obj.num != 0) {
+        if (data_obj.num > 0) {
             window.location.replace(window.location.origin + "/comic/" + (data_obj.num - 1));
         }
     });
 
     document.getElementById('random').addEventListener('click', (event) => {
-        let xhttp = new XMLHttpRequest();
-
-        xhttp.onreadystatechange = function () {
-            window.location.replace(window.location.origin + "/comic/" + (Math.floor(Math.random() * JSON.parse(this.responseText).num) + 1));
-        }
-        xhttp.open("GET", window.location.origin + "/api/getXKCD", true);
-        xhttp.send();
+        window.location.replace(window.location.origin + "/comic/" + (Math.floor(Math.random() * new_issue_num) + 1));
     });
 }
