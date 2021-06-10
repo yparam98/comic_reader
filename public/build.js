@@ -15,7 +15,7 @@ function getComic() {
         fill_html(JSON.parse(this.responseText));
     }
 
-    if (isNaN(issue)) {
+    if (isNaN(issue) || issue == 0) {
         xhttp.open("GET", window.location.origin + "/api/getXKCD", true);
     } else {
         xhttp.open("GET", window.location.origin + "/api/getXKCD?num=" + issue, true);
@@ -52,7 +52,7 @@ function fill_html(data_obj) {
     });
 
     document.getElementById('previous').addEventListener('click', (event) => {
-        if (data_obj.num > 0) {
+        if (data_obj.num > 1) {
             window.location.replace(window.location.origin + "/comic/" + (data_obj.num - 1));
         }
     });

@@ -1,21 +1,19 @@
 const axios = require('axios').default;
 
 exports.getXKCD = function (num) {
-    if (num == null) {
-        return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
+        if (num == null) {
             axios.get('http://xkcd.com/info.0.json').then((response) => {
                 resolve(response.data);
             }).catch((error) => {
-                reject(err);
+                reject(error);
             });
-        });
-    } else {
-        return new Promise((resolve, reject) => {
+        } else {
             axios.get('http://xkcd.com/' + num + '/info.0.json').then((response) => {
                 resolve(response.data);
             }).catch((error) => {
                 reject(error);
             });
-        });
-    }
+        }
+    });
 }
