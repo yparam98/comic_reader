@@ -46,7 +46,7 @@ function fill_html(data_obj) {
 
     document.getElementById('previous').addEventListener('click', (event) => {
         if (data_obj.num != 0) {
-            window.location.replace(window.location.origin + "/comic/" + (data_obj - 1));
+            window.location.replace(window.location.origin + "/comic/" + (data_obj.num - 1));
         }
     });
 
