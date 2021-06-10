@@ -11,9 +11,13 @@ const { response } = require('express');
 const { rejects } = require('assert');
 // const build = require('./build.js');
 
+var exec = require('child_process').exec;
+
 app.listen(port, () => {
     console.log("Express server listening on port ", port);
 });
+
+app.use(express.static('public'));
 
 // get today's comic
 app.get('/', (request, response) => {
@@ -21,30 +25,37 @@ app.get('/', (request, response) => {
 });
 
 // get comic by number
-app.get('/:num', (request, response) => {
+app.get('/comic/:num', (request, response) => {
     response.sendFile(path.join(__dirname, '/views/comic.html'));
 });
 
 app.get('/api/getXKCD', (request, response) => {
     try {
         service.getXKCD(request.query.num).then((data) => {
-            fs.appendFile(path.join(__dirname, '/counter.dat'), (data.num.toString() + '\n'), (err) => {
-                if (err) {
-                    throw err;
+            fs.appendFile(path.join(__dirname, '/counter.dat'), (data.num.toString() + '\n'), (file_error) => {
+                if (file_error) {
+                    throw file_error;
                 } else {
-                    response.send({
-                        "num": data.num,
-                        "title": data.safe_title,
-                        "link": data.img,
-                        "date": momentjs().year(data.year).month(data.month).date(data.day).format('LL')
+                    exec('grep -c ' + path.join(__dirname, '/counter.dat') + ' ' + data.num.toString(), (exec_error, exec_data) => {
+                        if (exec_error) {
+                            throw exec_error;
+                        } else {
+                            response.send({
+                                "num": data.num,
+                                "title": data.safe_title,
+                                "link": data.img,
+                                "date": momentjs().year(data.year).month(data.month).date(data.day).format('LL'),
+                                "views": exec_data.split(' ')[0]
+                            });
+                        }
                     });
                 }
             });
-        }).catch((err) => {
-            throw err;
+        }).catch((promise_error) => {
+            throw promise_error;
         });
-    } catch (err) {
-        response.status(500).send(err);
+    } catch (caught_error) {
+        response.status(500).send(caught_error);
     }
 });
 
