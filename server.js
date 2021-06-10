@@ -30,6 +30,7 @@ app.get('/comic/:num', (request, response) => {
 });
 
 app.get('/api/getXKCD', (request, response) => {
+    console.log("reached API");
     try {
         service.getXKCD(request.query.num).then((data) => {
             fs.appendFile(path.join(__dirname, '/counter.dat'), (data.num.toString() + '\n'), (file_error) => {

@@ -4,30 +4,30 @@ let next_button = document.getElementById('next');
 let prev_button = document.getElementById('previous');
 let rand_button = document.getElementById('random');
 
-let xhttp = new XMLHttpRequest();
-
 next_button.addEventListener('click', (event) => {
-    xhttp.onload = function () {
-        fill_html(this.response);
+    console.log(window.location.href);
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        fill_html(this.responseText);
     }
-    xhttp.open("GET", "/api/getXKCD/" + current_issue + 1, true);
-    xhttp.send();
+    xhttp.open("GET", window.location.href + "api/getXKCD", true);
+    xhttp.send({num: (current_issue + 1)});
 });
 
 prev_button.addEventListener('click', (event) => {
-    xhttp.onload = function () {
-        fill_html(this.response);
-    }
-    xhttp.open("GET", "/api/getXKCD/" + current_issue - 1, true);
-    xhttp.send();
+    // xhttp.onload = function () {
+    //     fill_html(this.responseText);
+    // }
+    // xhttp.open("GET", "/api/getXKCD/" + current_issue - 1, true);
+    // xhttp.send();
 });
 
 rand_button.addEventListener('click', (event) => {
-    xhttp.onload = function () {
-        fill_html(this.response);
-    }
-    xhttp.open("GET", "/api/getXKCD/" + (Math.floor(Math.random() * (100 - 1))), true);
-    xhttp.send();
+    // xhttp.onload = function () {
+    //     fill_html(this.responseText);
+    // }
+    // xhttp.open("GET", "/api/getXKCD/" + (Math.floor(Math.random() * (100 - 1))), true);
+    // xhttp.send();
 });
 
 function fill_html(data_obj) {
