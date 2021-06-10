@@ -36,7 +36,7 @@ app.get('/api/getXKCD', (request, response) => {
                 if (file_error) {
                     throw file_error;
                 } else {
-                    exec('grep -c ' + path.join(__dirname, '/counter.dat') + ' ' + data.num.toString(), (exec_error, exec_data) => {
+                    exec('grep -c ' + data.num.toString() + ' ' + path.join(__dirname, '/counter.dat'), (exec_error, exec_data) => {
                         if (exec_error) {
                             throw exec_error;
                         } else {
